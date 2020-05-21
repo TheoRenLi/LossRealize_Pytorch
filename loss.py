@@ -25,7 +25,7 @@ class MarginLoss(nn.Module):
         temp = torch.zeros(prediction.size()).long()
         if target.is_cuda:
             temp = temp.cuda()
-        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), 1)
+        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), value=1)
         return Variable(temp)
 
     def forward(self, prediction, target):
@@ -54,7 +54,7 @@ class SpreadLoss(nn.Module):
         temp = torch.zeros(prediction.size()).long()
         if target.is_cuda:
             temp = temp.cuda()
-        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), 1)
+        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), value=1)
         return Variable(temp)
 
     def forward(self, prediction, target):
@@ -88,12 +88,12 @@ class CrossEntropyLoss(nn.Module):
         temp = torch.zeros(prediction.size()).long()
         if target.is_cuda:
             temp = temp.cuda()
-        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), 1)
+        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), value=1)
         return Variable(temp)
 
     def forward(self, prediction, target):
         target = self.makeOneHot(prediction, target)
-        loss = - (target * torch.log(prediction) + (1 - target) * torch.log(1 - prediction))
+        loss = - (target * torch.log(prediction))
         return loss.sum(dim=1).mean()
 
 
@@ -117,7 +117,7 @@ class DSCLoss(nn.Module):
         temp = torch.zeros(prediction.size()).long()
         if target.is_cuda:
             temp = temp.cuda()
-        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), 1)
+        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), value=1)
         return Variable(temp)
 
     def forward(self, prediction, target):
@@ -147,7 +147,7 @@ class DiceLoss(nn.Module):
         temp = torch.zeros(prediction.size()).long()
         if target.is_cuda:
             temp = temp.cuda()
-        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), 1)
+        temp = temp.scatter_(dim=1, index=target.data.view(-1, 1), value=1)
         return Variable(temp)
 
     def forward(self, prediction, target):
